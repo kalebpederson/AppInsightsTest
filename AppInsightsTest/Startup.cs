@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +34,8 @@ namespace AppInsightsTest
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AppInsightsTest", Version = "v1" });
             });
             services.AddMemoryCache();
+            services.AddSingleton<IRandomNumberProvider, RandomNumberProvider>();
+          
             // TODO: Step 2 - Call AddApplicationInsightsTelemetry() extension method to register the
             // appropriate middleware so that hooks will all be in place to enable application monitoring.
             services.AddApplicationInsightsTelemetry(opts =>

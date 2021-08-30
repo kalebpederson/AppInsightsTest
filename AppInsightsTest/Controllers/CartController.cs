@@ -11,14 +11,14 @@ namespace AppInsightsTest.Controllers
     [Route("[controller]")]
     public class CartController : ControllerBase
     {
-        private static readonly Random _Random = new Random();
-        private static readonly object _Lock = new object();
         private readonly ILogger<CartController> _logger;
         private readonly IMemoryCache _memoryCache;
+        private readonly IRandomNumberProvider _randomNumberProvider;
 
-        public CartController(IMemoryCache memoryCache, ILogger<CartController> logger)
+        public CartController(IMemoryCache memoryCache, IRandomNumberProvider randomNumberProvider, ILogger<CartController> logger)
         {
             _memoryCache = memoryCache;
+            _randomNumberProvider = randomNumberProvider;
             _logger = logger;
         }
 
@@ -57,17 +57,14 @@ namespace AppInsightsTest.Controllers
             await Task.Delay(delay);
         }
         
-        private static async Task RandomDelayUpToMs(int maxValue)
+        private async Task RandomDelayUpToMs(int maxValue)
         {
             await Task.Delay(RandomValueUpTo(maxValue));
         }
 
-        private static int RandomValueUpTo(int maxValue)
+        private int RandomValueUpTo(int maxValue)
         {
-            lock (_Lock)
-            {
-                return _Random.Next(maxValue);
-            }
+            return _randomNumberProvider.GetRandomNumberUpTo(maxValue);
         }
         
     }
