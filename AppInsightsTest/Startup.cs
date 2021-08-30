@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,7 +35,6 @@ namespace AppInsightsTest
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AppInsightsTest", Version = "v1" });
             });
             services.AddMemoryCache();
-            services.AddSingleton<IRandomNumberProvider, RandomNumberProvider>();
           
             // TODO: Step 2 - Call AddApplicationInsightsTelemetry() extension method to register the
             // appropriate middleware so that hooks will all be in place to enable application monitoring.
@@ -51,6 +51,20 @@ namespace AppInsightsTest
             // TODO: Step 3 - Add ApplicationInsights section to your application settings (appsettings.json)
             // because we didn't specify an instrumentation key or connection string when enabling the 
             // telemetry as specified above.
+            
+            // TODO: Step 4 - We can track a dependency that's not already tracked by manually using the
+            // telemetry client and adding a custom metric. I prefer a decorator approach for this.
+            // We would typically have something like the following:
+            //
+            // services.AddSingleton<IRandomNumberProvider, RandomNumberProvider>();
+            //
+            // Instead, we will register a decorated version whose primary responsibility is to track the
+            // calls made to the dependency:
+            services.AddSingleton<IRandomNumberProvider>(provider =>
+                new DependencyTrackingRandomNumberProvider(
+                    new RandomNumberProvider(),
+                    provider.GetRequiredService<TelemetryClient>()
+                    ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -49,9 +49,9 @@ namespace AppInsightsTest.Controllers
         {
             var delay = cartId switch
             {
-                <= 500 => 20,
-                <= 1000 => 50,
-                <= 2000 => 100,
+                <= 500 => 50,
+                <= 1000 => 100,
+                <= 2000 => 300,
                 _ => throw new ArgumentOutOfRangeException($"{nameof(cartId)} must not be greater than 2000")
             };
             await Task.Delay(delay);
