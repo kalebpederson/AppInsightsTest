@@ -34,6 +34,7 @@ namespace AppInsightsTest
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AppInsightsTest", Version = "v1" });
             });
             services.AddMemoryCache();
+            services.AddSingleton<IRandomNumberProvider, RandomNumberProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
