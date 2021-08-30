@@ -28,7 +28,7 @@ namespace AppInsightsTest.Controllers
         {
             // NOTE: Bad practice to use an external id as a cache key :)
             _logger.LogInformation("Get request for cart {id}", cartId);
-            await RandomDelayUpTo100ms();
+            await RandomDelayUpToMs(100);
             return _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
         }
 
@@ -57,14 +57,17 @@ namespace AppInsightsTest.Controllers
             await Task.Delay(delay);
         }
         
-        private async Task RandomDelayUpTo100ms()
+        private static async Task RandomDelayUpToMs(int maxValue)
         {
-            int delay;
+            await Task.Delay(RandomValueUpTo(maxValue));
+        }
+
+        private static int RandomValueUpTo(int maxValue)
+        {
             lock (_Lock)
             {
-                delay = _Random.Next(100);
+                return _Random.Next(maxValue);
             }
-            await Task.Delay(delay);
         }
         
     }
