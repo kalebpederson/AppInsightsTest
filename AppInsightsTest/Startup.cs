@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace AppInsightsTest
 {
@@ -76,11 +79,27 @@ namespace AppInsightsTest
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AppInsightsTest v1"));
             }
+            
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = OnException
+            });
 
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+
+        private Task OnException(HttpContext context)
+        {
+            var errorContext = context.Features.Get<IExceptionHandlerPathFeature>();
+            Log.Logger.Error(
+                errorContext.Error,
+                "An unhandled exception occurred at {path}: {errorMessage}", 
+                errorContext.Path,
+                errorContext.Error.Message);
+            return Task.CompletedTask;
         }
 
         private static bool? GetAppInsightsDeveloperMode()

@@ -57,7 +57,7 @@
         </ConfigTestElement>
         <hashTree/>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Set Random CartId" enabled="true">
-          <stringProp name="maximumValue">3000</stringProp>
+          <stringProp name="maximumValue">2100</stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="outputFormat"></stringProp>
           <boolProp name="perThread">false</boolProp>

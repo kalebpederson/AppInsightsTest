@@ -41,7 +41,7 @@ namespace AppInsightsTest.Controllers
             var items = _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
             items.Add(item);
             _memoryCache.Set(cartId, items);
-            await RequiredItemDelayAsync(item.ItemId);
+            await RequiredItemDelayAsync(cartId);
             return Ok();
         }
 
