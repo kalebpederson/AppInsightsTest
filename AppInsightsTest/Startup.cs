@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -35,6 +36,15 @@ namespace AppInsightsTest
             });
             services.AddMemoryCache();
             services.AddSingleton<IRandomNumberProvider, RandomNumberProvider>();
+            services.AddHealthChecks()
+                .AddCheck<DependencyAvailableHealthCheck>(
+                    "DependencyHealthCheck", HealthStatus.Unhealthy, new [] {"liveness"});
+
+            services.Configure<HealthCheckPublisherOptions>(opts =>
+            {
+                opts.Delay = TimeSpan.FromSeconds(10);
+                opts.Predicate = check => check.Tags.Contains("liveness");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +60,11 @@ namespace AppInsightsTest
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHealthChecks("/healthz");
+            });
         }
     }
 }
