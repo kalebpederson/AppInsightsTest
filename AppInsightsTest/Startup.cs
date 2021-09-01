@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -38,6 +40,16 @@ namespace AppInsightsTest
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AppInsightsTest", Version = "v1" });
             });
             services.AddMemoryCache();
+            services.AddSingleton<IRandomNumberProvider, RandomNumberProvider>();
+            services.AddHealthChecks()
+                .AddCheck<DependencyAvailableHealthCheck>(
+                    "DependencyHealthCheck", HealthStatus.Unhealthy, new [] {"liveness"});
+
+            services.Configure<HealthCheckPublisherOptions>(opts =>
+            {
+                opts.Delay = TimeSpan.FromSeconds(10);
+                opts.Predicate = check => check.Tags.Contains("liveness");
+            });
           
             // TODO: Step 2 - Call AddApplicationInsightsTelemetry() extension method to register the
             // appropriate middleware so that hooks will all be in place to enable application monitoring.
@@ -88,7 +100,11 @@ namespace AppInsightsTest
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHealthChecks("/healthz");
+            });
         }
 
         private Task OnException(HttpContext context)
