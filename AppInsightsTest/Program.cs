@@ -8,8 +8,12 @@ namespace AppInsightsTest
 {
     public class Program
     {
+        // TODO: Step 1 - Install Microsoft.ApplicationInsights.AspNetCore NuGet Package
+        // See: https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core 
+        
         public static int Main(string[] args)
         {
+            // For more advanced logging configuration we can register Application Insights directly with Serilog
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
