@@ -14,6 +14,9 @@ namespace AppInsightsTest
         // TODO: Step 1 - Install Microsoft.ApplicationInsights.AspNetCore NuGet Package
         // See: https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core 
         
+        // TODO: Step 8 - Install Microsoft.ApplicationInsights.Profiler.AspNetCore
+        // see: https://github.com/microsoft/ApplicationInsights-Profiler-AspNetCore
+            
         public static int Main(string[] args)
         {
             // TODO: Step 5 - Call LoggerConfiguration.WriteTo.ApplicationInsights with

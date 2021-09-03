@@ -82,6 +82,10 @@ namespace AppInsightsTest
             
             // TODO: Step 7 - Publish the health check results to Application Insights as availability metrics
             services.AddSingleton<IHealthCheckPublisher, AppInsightsHealthCheckResultsPublisher>();
+            
+            // TODO: Step 9 - Enable the Application Insights Profiler. This will result in the stack sampler
+            // kicking in based on the profiler configuration settings.
+            services.AddServiceProfiler();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
