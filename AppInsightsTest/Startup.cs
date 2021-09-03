@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -45,6 +44,7 @@ namespace AppInsightsTest
             {
                 opts.Delay = TimeSpan.FromSeconds(10);
                 opts.Predicate = check => check.Tags.Contains("liveness");
+                opts.Period = TimeSpan.FromSeconds(30);
             });
           
             // TODO: Step 2 - Call AddApplicationInsightsTelemetry() extension method to register the
@@ -79,6 +79,9 @@ namespace AppInsightsTest
             
             // TODO: Step 6 - Enable a telemetry initializer so we can customize what is being sent as telemetry
             services.AddSingleton<ITelemetryInitializer, ThreadDetailsRequestMessageTelemetryInitializer>();
+            
+            // TODO: Step 7 - Publish the health check results to Application Insights as availability metrics
+            services.AddSingleton<IHealthCheckPublisher, AppInsightsHealthCheckResultsPublisher>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
