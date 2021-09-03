@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -74,6 +76,9 @@ namespace AppInsightsTest
                     new RandomNumberProvider(),
                     provider.GetRequiredService<TelemetryClient>()
                     ));
+            
+            // TODO: Step 6 - Enable a telemetry initializer so we can customize what is being sent as telemetry
+            services.AddSingleton<ITelemetryInitializer, ThreadDetailsRequestMessageTelemetryInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
