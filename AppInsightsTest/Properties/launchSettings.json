@@ -20,14 +20,13 @@
     "AppInsightsTest": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APPINSIGHTS_INSTRUMENTATIONKEY":  "b69df44d-ebe2-46ec-8450-f0128f10a321",
-        "APPINSIGHTS_PROFILERFEATURE_VERSION": "1.0.0",
-        "DiagnosticServices_EXTENSION_VERSION": "~3"
+        "APPINSIGHTS_CONNECTION_STRING":  "InstrumentationKey=b69df44d-ebe2-46ec-8450-f0128f10a321;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/",
+        "APPINSIGHTS_INSTRUMENTATIONKEY":  "b69df44d-ebe2-46ec-8450-f0128f10a321"
       }
     }
   }
