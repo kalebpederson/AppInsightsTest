@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -80,7 +81,12 @@ namespace AppInsightsTest.Controllers
         
         private async Task RandomDelayUpToMs(int maxValue)
         {
-            await Task.Delay(RandomValueUpTo(maxValue));
+            // TODO: Bonus 1 - We can track dependencies by recording operations which will create an operation
+            // hierarchy.
+            using (_telemetryClient.StartOperation<DependencyTelemetry>("RandomDelayDependency"))
+            {
+                await Task.Delay(RandomValueUpTo(maxValue));
+            }
         }
 
         private int RandomValueUpTo(int maxValue)

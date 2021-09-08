@@ -74,7 +74,7 @@ namespace AppInsightsTest
             // calls made to the dependency:
             services.AddSingleton<IRandomNumberProvider>(provider =>
                 new DependencyTrackingRandomNumberProvider(
-                    new RandomNumberProvider(),
+                    new RandomNumberProvider(provider.GetRequiredService<TelemetryClient>()),
                     provider.GetRequiredService<TelemetryClient>()
                     ));
             
