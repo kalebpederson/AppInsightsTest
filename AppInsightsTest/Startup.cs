@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -102,6 +103,15 @@ namespace AppInsightsTest
                 cfg.IsEnabledWhenProfiling = true;
                 cfg.IsEnabledInDeveloperMode = true;
                 cfg.SnapshotsPerTenMinutesLimit = 10;
+            });
+            
+            // TODO: Step 13 - Secure Live Metrics control plane by using authenticated API calls
+            // by:
+            // 1. Creating a new API key in the Azure Portal for Application Insights.
+            // 2. Configuring the QuickPulseTelemetryModule (live metrics view) to use an API key
+            services.ConfigureTelemetryModule<QuickPulseTelemetryModule>((module, opts) =>
+            {
+                module.AuthenticationApiKey = "pybmwdbwoic4ontzobzfd1knsb0hsy0nukg0bpik";
             });
         }
 
