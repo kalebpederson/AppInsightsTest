@@ -105,7 +105,7 @@ namespace AppInsightsTest
                 cfg.SnapshotsPerTenMinutesLimit = 10;
             });
             
-            // TODO: Step 13 - Secure Live Metrics control plane by using authenticated API calls
+            // TODO: Step 14 - Secure Live Metrics control plane by using authenticated API calls
             // by:
             // 1. Creating a new API key in the Azure Portal for Application Insights.
             // 2. Configuring the QuickPulseTelemetryModule (live metrics view) to use an API key
