@@ -85,7 +85,24 @@ namespace AppInsightsTest
             
             // TODO: Step 9 - Enable the Application Insights Profiler. This will result in the stack sampler
             // kicking in based on the profiler configuration settings.
-            services.AddServiceProfiler();
+            services.AddServiceProfiler(cfg =>
+            {
+                cfg.IsDisabled = true;
+                cfg.CPUTriggerThreshold = 70;
+                cfg.Duration = TimeSpan.FromSeconds(30);
+            });
+            
+            // TODO: Step 11 - Enable the Snapshot Debugger so that we have information about exceptions that
+            // are thrown within the application. No options are required if the defaults are agreeable.
+            // TODO: Step 12 - Add "Application Insights Snapshot Debugger" Role to user(s) that will need
+            // to access the Debug Snapshots within Application Insights.
+            services.AddSnapshotCollector(cfg =>
+            {
+                cfg.IsEnabled = true;
+                cfg.IsEnabledWhenProfiling = true;
+                cfg.IsEnabledInDeveloperMode = true;
+                cfg.SnapshotsPerTenMinutesLimit = 10;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

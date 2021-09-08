@@ -17,6 +17,9 @@ namespace AppInsightsTest
         // TODO: Step 8 - Install Microsoft.ApplicationInsights.Profiler.AspNetCore
         // see: https://github.com/microsoft/ApplicationInsights-Profiler-AspNetCore
             
+        // TODO: Step 10 - Install Microsoft.ApplicationInsights.SnapshotCollector
+        // see: https://docs.microsoft.com/en-us/azure/azure-monitor/app/snapshot-debugger-vm
+            
         public static int Main(string[] args)
         {
             // TODO: Step 5 - Call LoggerConfiguration.WriteTo.ApplicationInsights with

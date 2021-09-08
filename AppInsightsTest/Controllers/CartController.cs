@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -14,11 +15,13 @@ namespace AppInsightsTest.Controllers
         private readonly ILogger<CartController> _logger;
         private readonly IMemoryCache _memoryCache;
         private readonly IRandomNumberProvider _randomNumberProvider;
+        private readonly TelemetryClient _telemetryClient;
 
-        public CartController(IMemoryCache memoryCache, IRandomNumberProvider randomNumberProvider, ILogger<CartController> logger)
+        public CartController(IMemoryCache memoryCache, IRandomNumberProvider randomNumberProvider, TelemetryClient telemetryClient, ILogger<CartController> logger)
         {
             _memoryCache = memoryCache;
             _randomNumberProvider = randomNumberProvider;
+            _telemetryClient = telemetryClient;
             _logger = logger;
         }
 
@@ -41,8 +44,26 @@ namespace AppInsightsTest.Controllers
             var items = _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
             items.Add(item);
             _memoryCache.Set(cartId, items);
-            await RequiredItemDelayAsync(cartId);
+            await TryOrLogRequiredItemDelayAsync(cartId);
             return Ok();
+        }
+
+        private async Task TryOrLogRequiredItemDelayAsync(int cartId)
+        {
+            try
+            {
+                await RequiredItemDelayAsync(cartId);
+            }
+            catch (Exception ex)
+            {
+                // TODO: Step 13 - Explicitly track the exceptions that could/should show up within the
+                // debug snapshots.
+                _telemetryClient.TrackException(ex, new Dictionary<string,string>
+                {
+                    {"cartId", cartId.ToString()}
+                });
+                throw;
+            }
         }
 
         private static async Task RequiredItemDelayAsync(int cartId)
