@@ -56,7 +56,7 @@ namespace AppInsightsTest
                 opts.EnableAdaptiveSampling = true;                     // enabled by default
                 opts.EnableHeartbeat = true;                            // default is not documented
                 opts.DeveloperMode = GetAppInsightsDeveloperMode();     // useful to stream logs/events instead of batch
-                opts.EnablePerformanceCounterCollectionModule = false;  // enabled by default on Windows
+                opts.EnablePerformanceCounterCollectionModule = true;   // enabled by default on Windows
                 opts.EnableEventCounterCollectionModule = true;         // enabled by default for NetStandard 2+
             });
             

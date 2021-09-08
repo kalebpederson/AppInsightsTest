@@ -11,6 +11,9 @@ namespace AppInsightsTest
 {
     public class Program
     {
+        // TODO: Step 0 - Background information:
+        // Standard AspNetCore application with health checks and Serilog logging enabled.
+        
         // TODO: Step 1 - Install Microsoft.ApplicationInsights.AspNetCore NuGet Package
         // See: https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core 
         
