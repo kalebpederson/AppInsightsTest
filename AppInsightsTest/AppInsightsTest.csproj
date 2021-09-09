@@ -16,6 +16,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="..\Docs\SLIDES.md">
+        <Link>SLIDES.md</Link>
+      </Content>
+      <Content Include="..\README.md">
+        <Link>README.md</Link>
+      </Content>
       <Content Include="..\TODO.md">
         <Link>TODO.md</Link>
       </Content>
