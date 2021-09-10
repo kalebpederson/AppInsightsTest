@@ -18,8 +18,6 @@ namespace AppInsightsTest
 {
     public class Startup
     {
-        private const long OneMegabyte = 1024 * 1024;
-        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -88,7 +86,7 @@ namespace AppInsightsTest
             // kicking in based on the profiler configuration settings.
             services.AddServiceProfiler(cfg =>
             {
-                cfg.IsDisabled = true;
+                cfg.IsDisabled = false;
                 cfg.CPUTriggerThreshold = 70;
                 cfg.Duration = TimeSpan.FromSeconds(30);
             });
