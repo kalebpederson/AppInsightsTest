@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
+using Microsoft.ApplicationInsights.Profiler.Core.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -89,6 +90,7 @@ namespace AppInsightsTest
                 cfg.IsDisabled = false;
                 cfg.CPUTriggerThreshold = 70;
                 cfg.Duration = TimeSpan.FromSeconds(30);
+                cfg.InitialDelay = TimeSpan.FromMinutes(5);
             });
             
             // TODO: Step 11 - Enable the Snapshot Debugger so that we have information about exceptions that
@@ -100,7 +102,8 @@ namespace AppInsightsTest
                 cfg.IsEnabled = true;
                 cfg.IsEnabledWhenProfiling = true;
                 cfg.IsEnabledInDeveloperMode = true;
-                cfg.SnapshotsPerTenMinutesLimit = 10;
+                cfg.SnapshotsPerTenMinutesLimit = 2;
+                cfg.ThresholdForSnapshotting = 10;
             });
             
             // TODO: Step 14 - Secure Live Metrics control plane by using authenticated API calls

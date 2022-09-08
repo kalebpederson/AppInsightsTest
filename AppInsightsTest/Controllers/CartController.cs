@@ -59,6 +59,7 @@ namespace AppInsightsTest.Controllers
             {
                 // TODO: Step 13 - Explicitly track the exceptions that could/should show up within the
                 // debug snapshots.
+                _logger.LogError(ex, "Failure waiting for {methodName}", nameof(RequiredItemDelayAsync));
                 _telemetryClient.TrackException(ex, new Dictionary<string,string>
                 {
                     {"cartId", cartId.ToString()}
@@ -74,7 +75,7 @@ namespace AppInsightsTest.Controllers
                 <= 500 => 50,
                 <= 1000 => 100,
                 <= 2000 => 300,
-                _ => throw new ArgumentOutOfRangeException($"{nameof(cartId)} must not be greater than 2000")
+                _ => throw new ArgumentOutOfRangeException(nameof(cartId), $"{nameof(cartId)} must not be greater than 2000")
             };
             await Task.Delay(delay);
         }

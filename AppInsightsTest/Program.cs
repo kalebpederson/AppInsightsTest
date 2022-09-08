@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +10,7 @@ using Serilog.Events;
 
 namespace AppInsightsTest
 {
-    public class Program
+    public static class Program
     {
         // TODO: Step 0 - Background information:
         // Standard AspNetCore application with health checks and Serilog logging enabled.
@@ -25,7 +26,13 @@ namespace AppInsightsTest
             
         public static int Main(string[] args)
         {
+            // TODO: Step 1a - Use the updated activity format when tracing activities/requests
+            // default: Hierarchical for < .NET-5
+            // see: https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.activityidformat?view=net-5.0#System_Diagnostics_ActivityIdFormat_W3C
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+            
             // TODO: Step 5 - Call LoggerConfiguration.WriteTo.ApplicationInsights with
+            // Install NuGet Package: Serilog.Sinks.ApplicationInsights 
             // a configured Telemetry Client to have all of the logs recorded to the traces
             // table within Application Insights.
             Log.Logger = new LoggerConfiguration()

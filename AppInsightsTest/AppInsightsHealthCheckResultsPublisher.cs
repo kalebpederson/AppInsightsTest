@@ -29,7 +29,7 @@ namespace AppInsightsTest
                 DateTimeOffset.UtcNow,
                 report.TotalDuration,
                 _hostname,
-                report.Status == HealthStatus.Healthy
+                report.Status == HealthStatus.Healthy || report.Status == HealthStatus.Degraded
             );
             foreach (var (key, value) in report.Entries)
             {

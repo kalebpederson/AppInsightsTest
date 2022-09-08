@@ -19,7 +19,6 @@ namespace AppInsightsTest
             // Only pre-aggregated metrics should be used for high-throughput scenarios. The results are available
             // in the customMetrics table.
             _lazyMetric = new Lazy<Metric>(() => _telemetryClient.GetMetric("RandomDelayValue"), true);
-            
         }
         
         public int GetRandomNumberUpTo(int max)
@@ -63,6 +62,7 @@ namespace AppInsightsTest
             // in the Application Insights user interface, you'll need to enable multi-dimensional metrics:
             // see https://docs.microsoft.com/en-us/azure/azure-monitor/app/get-metric#enable-multi-dimensional-metrics
             _lazyMetric.Value.TrackValue(value);
+           
             return value;
         }
         
