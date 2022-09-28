@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
@@ -38,9 +39,6 @@ namespace AppInsightsTest
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-#if DEBUG
-                .WriteTo.Console()
-#endif
                 .WriteTo.ApplicationInsights(
                     GetConfiguredTelemetryClient(args),
                     TelemetryConverter.Traces,
@@ -48,7 +46,7 @@ namespace AppInsightsTest
                 .CreateLogger();
             try
             {
-                Log.Information("Creating and running web host");
+                Log.Information("Creating and running web host with PID={processId}", Process.GetCurrentProcess().Id);
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
