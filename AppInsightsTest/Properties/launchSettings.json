@@ -25,8 +25,10 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APPINSIGHTS_CONNECTION_STRING":  "InstrumentationKey=b69df44d-ebe2-46ec-8450-f0128f10a321;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/",
-        "APPINSIGHTS_INSTRUMENTATIONKEY":  "b69df44d-ebe2-46ec-8450-f0128f10a321"
+        "OriginalAPPINSIGHTS_CONNECTION_STRING":  "InstrumentationKey=d9e46fcc-3741-44fc-b2bd-c41f9217cecb;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/",
+        "APPINSIGHTS_CONNECTION_STRING":  "InstrumentationKey=a4c475ed-841b-49c2-ad3c-89ae72a9c7f1;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/",
+        "OriginalAPPINSIGHTS_INSTRUMENTATIONKEY":  "d9e46fcc-3741-44fc-b2bd-c41f9217cecb",
+        "APPINSIGHTS_INSTRUMENTATIONKEY":  "a4c475ed-841b-49c2-ad3c-89ae72a9c7f1"
       }
     }
   }

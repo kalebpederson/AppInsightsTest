@@ -102,8 +102,8 @@ namespace AppInsightsTest
                 cfg.IsEnabled = true;
                 cfg.IsEnabledWhenProfiling = true;
                 cfg.IsEnabledInDeveloperMode = true;
-                cfg.SnapshotsPerTenMinutesLimit = 2;
-                cfg.ThresholdForSnapshotting = 10;
+                cfg.SnapshotsPerTenMinutesLimit = 1;
+                cfg.ThresholdForSnapshotting = 1;
             });
             
             // TODO: Step 14 - Secure Live Metrics control plane by using authenticated API calls

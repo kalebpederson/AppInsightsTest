@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Threading;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +44,7 @@ namespace AppInsightsTest
                     GetConfiguredTelemetryClient(args),
                     TelemetryConverter.Traces,
                     LogEventLevel.Information)
+                .WriteTo.Console()
                 .CreateLogger();
             try
             {

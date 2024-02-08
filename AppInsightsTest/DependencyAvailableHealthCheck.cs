@@ -9,32 +9,35 @@ namespace AppInsightsTest
     public class DependencyAvailableHealthCheck : IHealthCheck
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly Random _random = new();
 
         public DependencyAvailableHealthCheck(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
         
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new())
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new())
         {
             try
             {
                 var service = GetOptionalServiceOrThrow<IRandomNumberProvider>();
+                var delay = _random.Next(8000);
+                await Task.Delay(delay, cancellationToken);
                 if (service is null)
                 {
-                    return Task.FromResult(
+                    return 
                         HealthCheckResult.Unhealthy(
-                            $"Unable to resolve {nameof(IRandomNumberProvider)} from IoC container."));
+                            $"Unable to resolve {nameof(IRandomNumberProvider)} from IoC container.");
                 }
             }
             catch (Exception ex)
             {
-                return Task.FromResult(
+                return 
                     HealthCheckResult.Unhealthy(
                         $"Exception thrown while attempting to resolve {nameof(IRandomNumberProvider)}",
-                        ex));
+                        ex);
             }
-            return Task.FromResult(HealthCheckResult.Healthy());
+            return HealthCheckResult.Healthy();
         }
 
         private T GetOptionalServiceOrThrow<T>()

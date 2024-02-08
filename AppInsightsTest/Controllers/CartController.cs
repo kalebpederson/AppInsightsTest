@@ -30,10 +30,13 @@ namespace AppInsightsTest.Controllers
         [HttpGet]
         public async Task<IEnumerable<CartItem>> GetItems([FromQuery]int cartId)
         {
-            // NOTE: Bad practice to use an external id as a cache key :)
-            _logger.LogInformation("Get request for cart {id}", cartId);
-            await RandomDelayUpToMs(100);
-            return _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
+            return await LogStartedEnded(nameof(GetItems), async () =>
+            {
+                // NOTE: Bad practice to use an external id as a cache key :)
+                _logger.LogInformation("Get request for cart {id}", cartId);
+                await RandomDelayUpToMs(100);
+                return _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
+            });
         }
 
 
@@ -41,14 +44,30 @@ namespace AppInsightsTest.Controllers
         [HttpPost]
         public async Task<ActionResult> AddItem([FromQuery]int cartId, [FromBody] CartItem item)
         {
-            _logger.LogInformation("Post request for cart item {@item}", item);
-            var items = _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
-            items.Add(item);
-            _memoryCache.Set(cartId, items);
-            await TryOrLogRequiredItemDelayAsync(cartId);
-            return Ok();
+            return await LogStartedEnded(nameof(AddItem), async () =>
+            {
+                _logger.LogInformation("Post request for cart item {@item}", item);
+                var items = _memoryCache.GetOrCreate(cartId, _ => new List<CartItem>());
+                items.Add(item);
+                _memoryCache.Set(cartId, items);
+                await TryOrLogRequiredItemDelayAsync(cartId);
+                return Ok();
+            });
         }
 
+        private Task<T> LogStartedEnded<T>(string opName, Func<Task<T>> func)
+        {
+            AppInsightsTestEventSource.Log.OperationStarted(opName);
+            try
+            {
+                return func();
+            }
+            finally
+            {
+                AppInsightsTestEventSource.Log.OperationEnded(opName);
+            }
+        }
+        
         private async Task TryOrLogRequiredItemDelayAsync(int cartId)
         {
             try
